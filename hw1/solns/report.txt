@@ -1,0 +1,36 @@
+-used python 2.7.3 for all programs
+-all commands written below are to be executed in unix shell
+
+*************
+Housekeeping
+*************
+-Creating counts file
+	-vanilla
+		-python count_freqs.py [training_file] > [counts_file]
+	-with _RARE_ replacing infrequent words
+		-python rares.py [training_file] [new training file]
+		-python count_freqs.py [new_training_file] > [counts_file]
+
+********************
+Baseline HMM Tagger
+********************
+-To Run Program: python hmm.py [counts_file] [test_file]
+	-using the class-provided files as an example, counts_file would be ner.counts and test_file would be ner_dev.dat
+-Performance (using _RARE_ for all infrequent words)
+	-Precision: 0.221961
+	-Recall: 0.525544
+	-F1-Score: 0.312106
+-Comments
+	-a lot of alphanumeric words received entity tags erroneously
+	-lowercase words also had false positives
+	-often entities were tagged, but with the wrong entity tag
+	-completely uppercase words often had false positives
+
+*************************
+Viterbi Algorithm Tagger
+*************************
+-To Run Program: python viterbi.py [counts_file] [test_file] 
+
+***********************************************
+Sophistocated Classifying for Infrequent Words
+***********************************************
