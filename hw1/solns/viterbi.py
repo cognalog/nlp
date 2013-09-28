@@ -11,14 +11,14 @@ def getEmission(x, y, store):
 		return 0
 	num = store[x][y]
 	denom = store[y]
-	return -1 * math.log(float(num)/float(denom), 2) if num != 0 and denom != 0 else 0
+	return math.log(float(num)/float(denom), 2) if num != 0 and denom != 0 else 0
 
 def getQ (y1, y2, y3, grams):
 	if(y1 not in grams):
 		return 0
 	num = grams[y1].gramCount(y2, y3)
 	denom = grams[y1].gramCount(y2)
-	return -1 * math.log(float(num) / float(denom), 2) if num != 0 and denom != 0 else 0
+	return math.log(float(num) / float(denom), 2) if num != 0 and denom != 0 else 0
 
 def pi (k, u, v):
 	global wordSeq
@@ -29,8 +29,7 @@ def pi (k, u, v):
 	maxW = ''
 	maxP = 0
 	for w in getS(k-2):
-		prev = -1 * math.log(table[k-1][w][u], 2) if table[k-1][w][u] > 0 else 0
-		p =  prev + getQ(w, u, v, tranStruct) * getEmission(wordSeq[k-1], v, emStruct)
+		p =  table[k-1][w][u] + getQ(w, u, v, tranStruct) * getEmission(wordSeq[k-1], v, emStruct)
 		if p > maxP:
 			maxP = p
 			maxW = w
