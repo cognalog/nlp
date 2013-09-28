@@ -1,12 +1,12 @@
 import sys
 import math
+from rares import getRares
+from classes import classify
 from hmm import storeData
 from trigs import storeCounts
 
 #returns the log of the emission parameter given x, y and the event counts
 def getEmission(x, y, store):
-	if x not in store:
-		x = "_RARE_"
 	if y not in store[x]:
 		return 0
 	num = store[x][y]
@@ -25,33 +25,31 @@ def getQ (y1, y2, y3, grams):
 	return math.log(float(num) / float(denom), 2) if num != 0 and denom != 0 else 0
 
 def pi (k, u, v):
-	global wordSeq
-	global tranStruct
-	global emStruct
-	global table
-
+	if wordSeq[k-1] in infreq or wordSeq[k-1] not in emStruct:
+		#determines whether _RARE_ or classify is used
+		word = "_RARE_"
+	else:
+		word = wordSeq[k-1]
 	maxW = ''
 	maxP = 0
 	for w in getS(k-2):
-		p =  table[k-1][w][u][1] + getQ(w, u, v, tranStruct) * getEmission(wordSeq[k-1], v, emStruct)
+		p =  table[k-1][w][u][1] + getQ(w, u, v, tranStruct) * getEmission(word, v, emStruct)
 		if p > maxP:
 			maxP = p
 			maxW = w
 	table[k][u][v] = (maxW, maxP)
 	#for testing purposes
-	return (maxW, maxP)
+	#return (maxW, maxP)
 
 
 def getS(k):
-	global wordSeq
-	global tranStruct
-
 	if k < 1:
 		return ['*']
-	elif wordSeq[k-1] in emStruct:
-		return emStruct[wordSeq[k-1]]
+	elif wordSeq[k-1] in infreq or wordSeq[k-1] not in emStruct:
+		#another choice point for_RARE_ or classify
+		return emStruct["_RARE_"]
 	else:
-		return emStruct['_RARE_']
+		return emStruct[wordSeq[k-1]]
 
 #extract data from counts file
 if __name__ == "__main__":
@@ -68,6 +66,7 @@ if __name__ == "__main__":
 		#structure data
 		tranStruct = storeCounts(sys.argv[1])
 		emStruct = storeData(cData)
+		infreq = getRares(cData)
 		n = len(wordSeq)
 		y = dict()
 		z = dict()

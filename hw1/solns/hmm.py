@@ -1,10 +1,9 @@
 import math
 import sys
+from classes import classify
 
 #returns the emission parameter given x, y and the event counts
 def getEmission(x, y, store):
-	if x not in store:
-		x = "_RARE_"
 	if y not in store[x]:
 		return 0
 	num = store[x][y]
@@ -40,6 +39,7 @@ def argMaxEmission(x, struct):
 	maxE = 0
 	maxY = ""
 	if x not in struct:
+		#choice point for _RARE_ vs classify
 		x = "_RARE_"
 	for y in struct[x]:
 		em = getEmission(x, y, struct)
@@ -48,20 +48,21 @@ def argMaxEmission(x, struct):
 			maxY = y
 	return (maxY, maxE)
 
-#get emission params from new data
-if len(sys.argv) != 3 and __name__ == "__main__":
-	print "usage: python "+sys.argv[0]+" <counts_file> <test_file>"
-elif __name__ == "__main__":
-	countsF = open(sys.argv[1])
-	testF = open(sys.argv[2])
-	eventD = countsF.read()
-	testD = testF.read()
-	countsF.close()
-	testF.close()
-	struct = storeData(eventD)
-	for word in testD.split("\n"):
-		if(len(word) < 1):
-			print ""
-			continue
-		ame = argMaxEmission(word, struct)
-		print word + " " + ame[0] + " " + str(math.log(ame[1],2))
+if __name__ == "__main__":
+	if len(sys.argv) != 3:
+		print "usage: python "+sys.argv[0]+" <counts_file> <test_file>"
+	else:
+		#get emission params from data
+		countsF = open(sys.argv[1])
+		testF = open(sys.argv[2])
+		eventD = countsF.read()
+		testD = testF.read()
+		countsF.close()
+		testF.close()
+		struct = storeData(eventD)
+		for word in testD.split("\n"):
+			if(len(word) < 1):
+				print ""
+				continue
+			ame = argMaxEmission(word, struct)
+			print word + " " + ame[0] + " " + str(math.log(ame[1],2))

@@ -58,11 +58,12 @@ def getQ (y1, y2, y3, grams):
 	denom = grams[y1].gramCount(y2)
 	return float(num) / float(denom) if num != 0 and denom != 0 else 0
 
-if len(sys.argv) != 2  and __name__ == "__main__":
-	print "usage: python "+sys.argv[0]+" <counts_file>"
-elif __name__ == "__main__":
-	grams = storeCounts(sys.argv[1])
-	while True:
-		lArr = raw_input("enter a trigram: ").split(" ")
-		q = getQ(lArr[0], lArr[1], lArr[2], grams)
-		print q if q == 0 else math.log(q, 2)
+if __name__ == "__main__":
+	if len(sys.argv) != 2:
+		print "usage: python "+sys.argv[0]+" <counts_file>"
+	else:
+		grams = storeCounts(sys.argv[1])
+		while True:
+			lArr = raw_input("enter a trigram: ").split(" ")
+			q = getQ(lArr[0], lArr[1], lArr[2], grams)
+			print q if q == 0 else math.log(q, 2)

@@ -24,7 +24,7 @@ def abbrev(word):
 def classify(word):
 	if 'land' in word:
 		return '_probLoc_'
-	if abbrev(word):
+	if abbrev(word) and len(word) > 1:
 		return '_abbrev_'
 	if word == word.capitalize() and word != word.upper():
 		return '_firstCapOnly_'

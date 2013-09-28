@@ -1,5 +1,6 @@
 -used python 2.7.3 for all programs
 -all commands written below are to be executed in unix shell
+-all of my modules should be kept in the same folder in order to work
 
 *************
 Housekeeping
@@ -8,8 +9,12 @@ Housekeeping
 	-vanilla
 		-python count_freqs.py [training_file] > [counts_file]
 	-with _RARE_ replacing infrequent words
-		-python rares.py [training_file] [new training file]
+		-python rares.py [training_file] [new_training_file]
 		-python count_freqs.py [new_training_file] > [counts_file]
+	-with sophistocated classifications for infrequent words
+		-python classes.py [training file] [new training file]
+		-python count_freqs.py [new_training_file] > [counts_file]
+
 
 ********************
 Baseline HMM Tagger
@@ -21,6 +26,7 @@ Baseline HMM Tagger
 	-Recall: 0.525544
 	-F1-Score: 0.312106
 -Comments
+	-takes about 1 second
 	-a lot of alphanumeric words received entity tags erroneously
 	-lowercase words also had false positives
 	-often entities were tagged, but with the wrong entity tag
@@ -29,8 +35,47 @@ Baseline HMM Tagger
 *************************
 Viterbi Algorithm Tagger
 *************************
--To Run Program: python viterbi.py [counts_file] [test_file] 
+-To Run Program: python viterbi.py [counts_file] [test_file]
+-Performance (using _RARE for all infrequent words)
+	-Precision: 0.070851
+	-Recall: 0.274659
+	-F1-Score: 0.112644
+-Comments
+	-takes about 24 seconds
+	-plethora of false positives
+	-somehow the word "in" was repeatedly tagged I-Org
+	-punctuation was also tagged repeatedly
+	-many false positives with fully-uppercase words
 
 ***********************************************
 Sophistocated Classifying for Infrequent Words
 ***********************************************
+-To Run: read "Creating counts file" above (up in Housekeeping)
+-Performance
+	-Baseline
+		-Precision: 0.459226
+		-Recall: 0.697859
+		-F1-Score: 0.553935
+	-Viterbi
+		-Precision: 0.070303
+		-Recall: 0.264711
+		-F1-Score: 0.111099
+-Comments
+	-Significantly improved Baseline, marginally worsened viterbi
+	-There must be a deeper problem with my viterbi implementation
+-Additional Info
+	-probLoc: a word with 'land' in it
+	-abbrev: a word with only capital letters and periods
+	-firstCapOnly: a word with the first letter capitalized, but not all of them
+	-firstOrAllCaps: a capitalized word that may be completely uppercase
+	-probO: a word that's either all lowercase or without alphabetic characters
+	-weirdo: a word that doesn't fit into any of the above categories
+
+*********************
+Non-tagging Programs
+*********************
+-These simply work like they're supposed to
+-Running them
+	-_RARE_ replacer: read "Creating counts file" above (up in Housekeeping)
+	-classifying replacer: read "Creating counts file" above (up in Housekeeping)
+	-trigram probability calculator: python trigs.py [counts_file]

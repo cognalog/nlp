@@ -24,14 +24,14 @@ def getRares(body):
 creates a new training file, where each word below the frequency threshold=5 is
 replaced by the class name _RARE_
 """
-def replaceRares():
+def replaceRares(oldF, newF):
 	#find the rare words
-	oldTrain = open(argv[1])
+	oldTrain = open(oldF)
 	oldDat = oldTrain.read()
 	oldTrain.close()
 	rares = getRares(oldDat)
 	#replace the rare words
-	newTrain = open(argv[2], 'w')
+	newTrain = open(newF, 'w')
 	for line in oldDat.split("\n"):
 		temp = line.split(" ")
 		if temp[0] in rares:
@@ -41,6 +41,6 @@ def replaceRares():
 
 if __name__ == "__main__":
 	if len(sys.argv) < 3:
-		print "usage: python "+argv[0]+" <training_file> <new_training_file>"
+		print "usage: python "+sys.argv[0]+" <training_file> <new_training_file>"
 	else:
-		replaceRares()
+		replaceRares(sys.argv[1], sys.argv[2])
