@@ -43,8 +43,8 @@ def getS(k):
 
 	if k < 1:
 		return ['*']  
-	elif wordSeq[k] in emStruct:
-		return emStruct[wordSeq[k]]
+	elif wordSeq[k-1] in emStruct:
+		return emStruct[wordSeq[k-1]]
 	else:
 		return emStruct['_RARE_']
 
@@ -62,13 +62,27 @@ elif __name__ == "__main__":
 	#structure data
 	tranStruct = storeCounts(sys.argv[1])
 	emStruct = storeData(cData)
+	n = len(wordSeq)
 	table = dict()
 	#fill up the dynamic programming table with pi values
 	table[0] = {'*': {'*': 1}}
-	for k in xrange(1,5):
+	for k in xrange(1,n):
 		table[k] = dict()
 		for u in getS(k-1):
 			table[k][u] = dict()
 			for v in getS(k):
 				p = pi(k, u, v)
 				print str(k)+' '+u+' '+v+' '+str(p)
+
+	#get u and v with highest pi at n
+	maxU = ''
+	maxV = ''
+	maxP = 0
+	for u in getS(n-1):
+		for v in getS(n):
+			p = table[n][u][v] + getQ(u,v,'STOP',tranStruct)
+			if p > maxP:
+				maxP = p
+				maxV = v
+				maxU = u
+	print "maxU: "+maxU+" maxP: "+maxP
