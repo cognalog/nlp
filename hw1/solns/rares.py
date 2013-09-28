@@ -21,7 +21,7 @@ def getRares(body):
 	return infreq
 
 """
-creates a file new_train.dat, where each word below the frequency threshold=5 is
+creates a new training file, where each word below the frequency threshold=5 is
 replaced by the class name _RARE_
 """
 def replaceRares():
@@ -39,7 +39,8 @@ def replaceRares():
 		newTrain.write(" ".join(temp) + "\n")
 	newTrain.close()
 
-if len(sys.argv) < 3:
-	print "usage: python "+argv[0]+" <training_file> <new_training_file>"
-elif __name__ == "__main__":
-	replaceRares()
+if __name__ == "__main__":
+	if len(sys.argv) < 3:
+		print "usage: python "+argv[0]+" <training_file> <new_training_file>"
+	else:
+		replaceRares()
