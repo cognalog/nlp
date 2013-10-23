@@ -1,9 +1,12 @@
 JCC = javac
 JSON = ./json-simple-1.1.1.jar
-JFLAGS = -g -cp $(JSON)
+JFLAGS = -g -Xlint:unchecked -cp $(JSON)
 
-Prob4.class:	Prob4.java org.json-20120521.jar
+Prob4.class:	Prob4.java CNFTree.java
 	$(JCC) $(JFLAGS) Prob4.java
+
+CNFTree.class: CNFTree.java
+	$(JCC) $(JFLAGS) CNFTree.java
 
 .PHONY: clean
 clean:
