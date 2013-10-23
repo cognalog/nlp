@@ -5,9 +5,6 @@ JFLAGS = -g -cp $(JSON)
 Prob4.class:	Prob4.java CNFTree.java
 	$(JCC) $(JFLAGS) Prob4.java
 
-CNFTree.class: CNFTree.java
-	$(JCC) $(JFLAGS) CNFTree.java
-
 .PHONY: clean
 clean:
 	rm -f *.class
