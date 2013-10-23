@@ -1,3 +1,7 @@
 *.pyc
 *.dat
 *.counts
+*.pdf
+*.tex
+*.class
+*.sty
