@@ -94,15 +94,14 @@ def pi(table, pt, rules, wc, words, i, j, x):
 	return (aMax, pMax)
 	
 if __name__ == "__main__":
-	if(len(argv) != 4):
-		print("usage: python %s <counts_file> <dev_file> <output_file>" % argv[0])
+	if(len(argv) != 3):
+		print("usage: python %s <counts_file> <dev_file>" % argv[0])
 	else:
 		nfo = getRuleCounts(argv[1])
 		cTable = nfo[1] #all the rule counts
 		bins = nfo[0] #binary rules
 		wc = nfo[2] # word counts
 		devF = open(argv[2])
-		out = open(argv[3], "w")
 
 		#find arg max(Pt) for each line
 		tests = devF.read().split("\n")
@@ -116,7 +115,7 @@ if __name__ == "__main__":
 					piTable[i][j] = dict()
 			pv = pi(cTable, piTable, bins, wc, words, 1, len(words), "S")
 			if(pv[1] > 0):
-				out.write(dumps(pv[0])+"\n")
+				print(dumps(pv[0])+"\n")
 			else: #if we're dealing w/ a sentence fragment
 				aMax = []
 				pMax = 0
@@ -125,7 +124,6 @@ if __name__ == "__main__":
 					if(pv[1] > pMax):
 						pMax = pv[1]
 						aMax = pv[0]
-				out.write(dumps(aMax)+"\n")
+				print(dumps(aMax)+"\n")
 
 		devF.close()
-		out.close()
