@@ -115,7 +115,7 @@ if __name__ == "__main__":
 					piTable[i][j] = dict()
 			pv = pi(cTable, piTable, bins, wc, words, 1, len(words), "S")
 			if(pv[1] > 0):
-				print(dumps(pv[0])+"\n")
+				print(dumps(pv[0]))
 			else: #if we're dealing w/ a sentence fragment
 				aMax = []
 				pMax = 0
@@ -124,6 +124,6 @@ if __name__ == "__main__":
 					if(pv[1] > pMax):
 						pMax = pv[1]
 						aMax = pv[0]
-				print(dumps(aMax)+"\n")
+				print(dumps(aMax))
 
 		devF.close()
