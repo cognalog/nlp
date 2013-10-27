@@ -49,54 +49,65 @@ def getQ(table, *args):
 	else:
 		return 0
 
+def stored(table, i, j, x):
+	return i in table and j in table[i] and x in table[i][j]
+
 def pi(table, pt, rules, words, i, j, x):
 	#print("%s %d-%d" % (x,i,j))
 	if(i == j):
-		return (x, getQ(table, x, words[i-1]))
+		return ([x, words[i-1]], getQ(table, x, words[i-1]))
 	aMax = [x, '~', '~']
 	pMax = 0
 	if x in rules:
 		for (y, z) in rules[x]:
 			for s in range(i, j):
-				#print("pt checking: %s %d-%d, %s %d-%d" % (y,i,s,z,s+1,j))
-				py = pi(table, pt, rules, words, i, s, y)
-				pz = pi(table, pt, rules, words, s+1, j, z)
+				#skip the recursion if the pi value's been stored
+				if stored(pt, i, s, y):
+					py = pt[i][s][y]
+				else:
+					py = pi(table, pt, rules, words, i, s, y)
+				if stored(pt, s+1, j, z):
+					pz = pt[s+1][j][z]
+				else:
+					pz = pi(table, pt, rules, words, s+1, j, z)
 				q = getQ(table, x, y, z)
 				if py[1] > 0 and pz[1] > 0 and q > 0:
-					#get log sum instead of product to prevent underflow
 					p = abs(log(q, 2) + log(py[1], 2) + log(pz[1], 2))
-					#print("%s: %s" % (x,p))
 				else:
 					p = 0
-				#print("%s->%s %d-%d, %s %d-%d" % (x,y,i,s,z,s+1,j))
 				if p > pMax:
-					aMax[1] = py[0]
+					aMax[1] = py[0] #update arg max
 					aMax[2] = pz[0]
-					pMax = p
-	else:
-		print(x+" is unary")
+					pMax = p #update max
+	#store this pi value for later use
+	pt[i][j][x] = (aMax, pMax)
 	return (aMax, pMax)
 	
 if __name__ == "__main__":
 	if(len(argv) != 3):
 		print("usage: python %s <counts_file> <dev_file>" % argv[0])
 	else:
-		
 		nfo = getRuleCounts(argv[1])
 		rules = nfo[0]
 		cTable = nfo[1] #cTable.keys() gives all nonterms
 		devF = open(argv[2])
-		#for line in devF.read().split("\n"):
-		line = "Ms. Haag"
-		piTable = dict()
-		words = line.split(" ")
-		print(pi(cTable, piTable, rules, words, 1, 2, "NP"))
-		"""
-		for i in range(1,len(words)+1):
-			piTable[i] = dict()
-			for j in range(i+1,len(words)+1):
-				piTable[i][j] = dict()
+		for line in devF.read().split("\n"):
+			words = line.split(" ")
+			#set up the table
+			piTable = dict()
+			for i in range(1,len(words)+1):
+				piTable[i] = dict()
+				for j in range(i+1,len(words)+1):
+					piTable[i][j] = dict()
+			pv = pi(cTable, piTable, rules, words, 1, len(words), "S")
+			if(pv[1] > 0):
+				print(pv[0])
+			else: #if we're dealing w/ a sentence fragment
+				aMax = []
+				pMax = 0
 				for x in cTable.keys():
-					print("%s: %d - %d" % (x,i,j))
-					piTable[i][j][x] = pi(cTable, piTable, rules, words, i, j, x)
-		"""
+					pv = pi(cTable, piTable, rules, words, 1, len(words), x)
+					if(pv[1] > pMax):
+						pMax = pv[1]
+						aMax = pv[0]
+				print(aMax)
