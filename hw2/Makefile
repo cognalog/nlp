@@ -24,3 +24,7 @@ run4: Prob4.class setup
 .PHONY: run5
 run5: prob5.py data/cfg.counts data/parse_dev.dat
 	python prob5.py data/rare.counts data/parse_dev.dat data/cky.results
+
+.PHONY: eval
+eval: run5 data/eval_parser.py data/parse_dev.key 
+	python data/eval_parser.py data/parse_dev.key data/cky.results
