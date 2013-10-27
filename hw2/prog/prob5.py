@@ -58,9 +58,9 @@ def pi(table, pt, rules, words, i, j, x):
 	if x in rules:
 		for (y, z) in rules[x]:
 			for s in range(i, j):
-				print("pt checking: %s %d-%d, %s %d-%d" % (y,i,s,z,s+1,j))
-				py = pt[i][s][y]
-				pz = pt[s+1][j][z]
+				#print("pt checking: %s %d-%d, %s %d-%d" % (y,i,s,z,s+1,j))
+				py = pi(table, pt, rules, words, i, s, y)
+				pz = pi(table, pt, rules, words, s+1, j, z)
 				q = getQ(table, x, y, z)
 				if py[1] > 0 and pz[1] > 0 and q > 0:
 					#get log sum instead of product to prevent underflow
@@ -81,14 +81,17 @@ if __name__ == "__main__":
 	if(len(argv) != 3):
 		print("usage: python %s <counts_file> <dev_file>" % argv[0])
 	else:
+		
 		nfo = getRuleCounts(argv[1])
 		rules = nfo[0]
 		cTable = nfo[1] #cTable.keys() gives all nonterms
 		devF = open(argv[2])
 		#for line in devF.read().split("\n"):
-		line = "plays Elianti ."
+		line = "Ms. Haag"
 		piTable = dict()
 		words = line.split(" ")
+		print(pi(cTable, piTable, rules, words, 1, 2, "NP"))
+		"""
 		for i in range(1,len(words)+1):
 			piTable[i] = dict()
 			for j in range(i+1,len(words)+1):
@@ -96,3 +99,4 @@ if __name__ == "__main__":
 				for x in cTable.keys():
 					print("%s: %d - %d" % (x,i,j))
 					piTable[i][j][x] = pi(cTable, piTable, rules, words, i, j, x)
+		"""
