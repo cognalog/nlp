@@ -23,4 +23,4 @@ run4: Prob4.class setup
 
 .PHONY: run5
 run5: prob5.py data/cfg.counts data/parse_dev.dat
-	python prob5.py data/rare.counts data/parse_dev.dat > data/cky.results
+	python prob5.py data/rare.counts data/parse_dev.dat data/cky.results
