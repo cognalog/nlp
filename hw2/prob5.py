@@ -83,7 +83,7 @@ def pi(table, pt, rules, wc, words, i, j, x):
 					pz = pi(table, pt, rules, wc, words, s+1, j, z)
 				q = getQ(table, x, y, z)
 				if py[1] > 0 and pz[1] > 0 and q > 0:
-					p = abs(log(q, 2) + log(py[1], 2) + log(pz[1], 2))
+					p = q * py[1] * pz[1]
 				else:
 					p = 0
 				if p > pMax:
