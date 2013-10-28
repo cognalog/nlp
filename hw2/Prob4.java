@@ -4,7 +4,10 @@ import java.io.*;
 import java.util.HashMap;
 
 public class Prob4{
-	
+	/*
+		takes a tree and returns a version with every rare word replaced with _RARE_.
+		Which words are rare depends on the "rares" hashmap
+	*/
 	public static JSONArray replaceRares(JSONArray tree, HashMap<String, Integer> rares){
 		if(tree.size() == 2){
 			if(rares.containsKey(tree.get(1)))
@@ -15,7 +18,10 @@ public class Prob4{
 		}
 		return tree;
 	}
-
+	/*
+		commoness of words is determined from the counts file, and then rare words are replaced in
+		a copy of the original trees.  The trees are then written to a new file specified in the arguments.
+	*/
 	public static void main(String[] args){
 		if(args.length < 3){
 			System.out.println("usage: java Prob4 <counts_file> <training_file> <replacement_file>");
@@ -51,6 +57,7 @@ public class Prob4{
 					rares.put(word, counts.get(word));
 			}
 
+			//modify the trees from the training file, and put them into a new file
 			JSONParser parser = new JSONParser();
 			while((line = trainBR.readLine()) != null){
 				JSONArray tree = (JSONArray)parser.parse(line);

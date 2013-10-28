@@ -2,8 +2,9 @@
 Running the Code
 ****************
 -I set up a Makefile to facilitate running the code.  Of course you don't have to use it if you don't want to, but I'll be describing how to use it.
--using the Makefile to solve the 3 questions
+-using the Makefile to solve the 3 questions:
 	-Question 4:
+		-I used the json-simple package to parse json.  A jar file is included in the main directory
 		-run "make data/rare.counts" in the main directory (using unix terminal)
 		-output: rare.counts and rares.dat
 			-rares.dat is essentially parse_train.dat with rare (count < 5) words replaced by _RARE_
@@ -42,4 +43,4 @@ Observations
 -Question 6
 	-same issue with log sums and rares
 	-scores are better across the board
-	-takes a bit more time
+	-takes a bit more time, but could be worse
