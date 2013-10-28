@@ -56,11 +56,12 @@ def getQ(table, *args):
 	else:
 		return 0
 
+#determines whether a pi value is already cached in the dynamic pi table
 def stored(table, i, j, x):
 	return i in table and j in table[i] and x in table[i][j]
 
+#recursive implementation of the cky algorithm
 def pi(table, pt, rules, wc, words, i, j, x):
-	#print("%s %d-%d" % (x,i,j))
 	if(i == j):
 		#correct for rare words
 		if words[i-1] not in wc or wc[words[i-1]] < 5:
@@ -82,10 +83,7 @@ def pi(table, pt, rules, wc, words, i, j, x):
 				else:
 					pz = pi(table, pt, rules, wc, words, s+1, j, z)
 				q = getQ(table, x, y, z)
-				if py[1] > 0 and pz[1] > 0 and q > 0:
-					p = q * py[1] * pz[1]
-				else:
-					p = 0
+				p = q * py[1] * pz[1] #where the math happens
 				if p > pMax:
 					aMax[1] = py[0] #update arg max
 					aMax[2] = pz[0]
@@ -95,7 +93,7 @@ def pi(table, pt, rules, wc, words, i, j, x):
 	return (aMax, pMax)
 	
 if __name__ == "__main__":
-	if(len(argv) != 3):
+	if(len(argv) != 3): #make sure arguments are ok
 		print("usage: python %s <counts_file> <dev_file>" % argv[0])
 	else:
 		nfo = getRuleCounts(argv[1])

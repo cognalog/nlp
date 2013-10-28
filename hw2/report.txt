@@ -26,13 +26,20 @@ Performance
 ***********
 -Question 5
 	-9.8 minutes
-	-score: 0.374 precision, recall and f-score
+	-score: 0.714 precision, recall and f-score
 -Question 6
 	-15 minutes
-	-score: 0.422 precision, recall and f-score
+	-score: 0.742 precision, recall and f-score
 
 ************
 Observations
 ************
 -Question 5
+	-_RARE_ likelihood may have been disproportionately high
+		-more specific classification would be better
+	-using log sums instead of actual products in cky dramatically lowers score
+		-underflow is not an issue
 -Question 6
+	-same issue with log sums and rares
+	-scores are better across the board
+	-takes a bit more time
