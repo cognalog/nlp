@@ -1,0 +1,38 @@
+****************
+Running the Code
+****************
+-I set up a Makefile to facilitate running the code.  Of course you don't have to use it if you don't want to, but I'll be describing how to use it.
+-using the Makefile to solve the 3 questions
+	-Question 4:
+		-run "make data/rare.counts" in the main directory (using unix terminal)
+		-output: rare.counts and rares.dat
+			-rares.dat is essentially parse_train.dat with rare (count < 5) words replaced by _RARE_
+			-rare.counts is the result of running the provided counting script on rares.dat
+		-each file ends up in the data/ directory
+	-Question 5
+		-run "make eval5" in the main directory (using unix terminal)
+		-output: cky.results and cky.eval
+			-cky.results contains the parse trees generated for parse_dev.dat by my cky implementation
+			-cky.eval contains the result of running the provided evaluation script on cky.results
+		-each file ends up in the data/ directory
+	-Question 6
+		-run "make eval6" in the main directory (using unix terminal)
+		-output: vr.results and vr.eval, in addition to some intermediate files
+			-similar to the output of Solution 5, but using markovized rules
+		-each file ends up in the data/ directory
+
+***********
+Performance
+***********
+-Question 5
+	-9.8 minutes
+	-score: 0.374 precision, recall and f-score
+-Question 6
+	-15 minutes
+	-score: 0.422 precision, recall and f-score
+
+************
+Observations
+************
+-Question 5
+-Question 6

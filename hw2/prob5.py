@@ -1,6 +1,7 @@
 from sys import argv
 from math import log
 from json import dumps
+from time import localtime, mktime
 
 #returns (rule list, rule counts)
 def getRuleCounts(fname):
@@ -125,5 +126,4 @@ if __name__ == "__main__":
 						pMax = pv[1]
 						aMax = pv[0]
 				print(dumps(aMax))
-
 		devF.close()

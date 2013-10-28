@@ -32,12 +32,12 @@ data/vr.results: prob5.py data/vr.counts data/parse_dev.dat
 
 .PHONY: clean
 clean:
-	rm -f *.class data/*.counts data/*.results data/*rare*
+	rm -f *.class data/*.counts data/*.results data/*rare* data/*.eval
 
-.PHONY: eval
-eval: data/eval_parser.py data/parse_dev.key data/cky.results
-	$(PY) data/eval_parser.py data/parse_dev.key data/cky.results
+.PHONY: eval5
+eval5: data/eval_parser.py data/parse_dev.key data/cky.results
+	$(PY) data/eval_parser.py data/parse_dev.key data/cky.results > data/cky.eval
 
-.PHONY: vEval
-vEval: data/eval_parser.py data/parse_dev.key data/vr.results
-	$(PY) data/eval_parser.py data/parse_dev.key data/vr.results
+.PHONY: eval6
+eval6: data/eval_parser.py data/parse_dev.key data/vr.results
+	$(PY) data/eval_parser.py data/parse_dev.key data/vr.results > data/vr.eval
