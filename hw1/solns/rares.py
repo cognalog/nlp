@@ -35,7 +35,7 @@ def replaceRares(oldF):
 		temp = line.split(" ")
 		if temp[0] in rares:
 			temp[0] = "_RARE_"
-		print(" ".join(temp) + "\n")
+		print(" ".join(temp))
 
 if __name__ == "__main__":
 	if len(sys.argv) < 2:

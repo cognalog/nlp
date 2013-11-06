@@ -65,4 +65,4 @@ if __name__ == "__main__":
 				print ""
 				continue
 			ame = argMaxEmission(word, struct)
-			print word + " " + ame[0] + " " + str(math.log(ame[1],2))
+			print word + " " + ame[0] + " " + str(ame[1])
