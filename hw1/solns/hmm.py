@@ -8,7 +8,7 @@ def getEmission(x, y, store):
 		return 0
 	num = store[x][y]
 	denom = store[y]
-	return float(num)/float(denom)
+	return float(num)/float(denom) if denom != 0 else 0
 
 
 
@@ -17,6 +17,7 @@ builds a dictionary for quick access of the data
 keys are either words or tags:
 	dict[word] = nested dictionary with tags for keys and count(word | tag) for values
 	dict[tag] = count(tag)
+	potential problem: identical word/tag
 returns said dictionary
 """
 def storeData(body):
