@@ -1,7 +1,7 @@
 JCC = javac
 JSON = ./json-simple-1.1.1.jar
 JFLAGS = -g -cp $(JSON)
-PY = python
+PY = python2
 
 Prob4.class:	Prob4.java json-simple-1.1.1.jar
 	$(JCC) $(JFLAGS) Prob4.java
