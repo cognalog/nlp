@@ -15,7 +15,7 @@ public class Prob4{
 		BufferedReader forFile = new BufferedReader(new FileReader(fFName));
 		ArrayList<Integer> lines = new ArrayList();
 		HashMap<String, HashMap<String, Double>> emissions = new HashMap();
-		
+		emissions.put("_NULL_", new HashMap());
 		String eline, fline;
 		//find which english corpus lines contain the word
 		while((eline = engFile.readLine()) != null){
@@ -24,6 +24,7 @@ public class Prob4{
 				if(!emissions.containsKey(e))
 					emissions.put(e, new HashMap());
 				for(String f : fline.split(" ")){
+					emissions.get("_NULL_").put(f, -1.0);
 					emissions.get(e).put(f, -1.0);
 				}
 			}
@@ -62,6 +63,6 @@ public class Prob4{
 		//make readers for english and german corpora
 		eFName = args[0];
 		fFName = args[1];
-		System.out.println(1.0 / initialTs().get("resumption").size());
+		System.out.println(1.0 / initialTs().get("_NULL_").size());
 	}
 }
