@@ -3,21 +3,16 @@ import java.util.HashMap;
 import java.io.*;
 
 public class Prob4{
-	static BufferedReader engFile;
-	static BufferedReader forFile;
 	static String eFName;
 	static String fFName;
 	static PrintStream stdout = System.out;
-
-	private static void resetReaders() throws FileNotFoundException{
-		engFile = new BufferedReader(new FileReader(eFName));
-		forFile = new BufferedReader(new FileReader(fFName));
-	}
 
 	/*
 	* gives an initial value for t(f | e) for a particular e regardless of f
 	*/
 	private static double initialT(String word) throws IOException{
+		BufferedReader engFile = new BufferedReader(new FileReader(eFName));
+		BufferedReader forFile = new BufferedReader(new FileReader(fFName));
 		ArrayList<Integer> lines = new ArrayList();
 		HashMap<String, Integer> emissions = new HashMap();
 		String line;
@@ -48,8 +43,28 @@ public class Prob4{
 		return (emissions.size() > 0) ? 1.0 / emissions.size() : 0;
 	}
 /*
-	public static HashMap<String, HashMap<String, Double>> emAlg(int iterations){
+	public static HashMap<String, HashMap<String, Double>> emAlg(int iterations) throws IOException{
+		HashMap<String, HashMap<String, Double>> params = new HashMap();
+		for(int its = 0; its < iterations; its++){//for s = 1..S
+			BufferedReader engFile = new BufferedReader(new FileReader(eFName));
+			BufferedReader forFile = new BufferedReader(new FileReader(fFName));
+			String eline, fline;
+			while((eline = engFile.readLine()) != null){//for k = 1..n
+				fline = forFile.readLine();
+				int i = 0; //foreign word index
+				for(String f : fline.split(" ")){//for i = 1..mk
+					int j = 0; //english word index
+					for(String e : eline.split(" ")){//for j = 0..lk
+						double t = initialT(e);
 
+						j++;
+					}
+					i++;
+				}
+			}
+		}
+		
+		return params;
 	}
 */
 	public static void main(String[] args) throws IOException{
@@ -60,7 +75,5 @@ public class Prob4{
 		//make readers for english and german corpora
 		eFName = args[0];
 		fFName = args[1];
-		resetReaders();
-		stdout.println(initialT("resumption"));
 	}
 }
