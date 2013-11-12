@@ -10,41 +10,29 @@ public class Prob4{
 	/*
 	* gives an initial value for t(f | e) for a particular e regardless of f
 	*/
-	private static double initialT(String word) throws IOException{
+	private static HashMap<String, HashMap<String, Double>> initialTs() throws IOException{
 		BufferedReader engFile = new BufferedReader(new FileReader(eFName));
 		BufferedReader forFile = new BufferedReader(new FileReader(fFName));
 		ArrayList<Integer> lines = new ArrayList();
-		HashMap<String, Integer> emissions = new HashMap();
-		String line;
+		HashMap<String, HashMap<String, Double>> emissions = new HashMap();
 		
-		int i= 0;
+		String eline, fline;
 		//find which english corpus lines contain the word
-		while((line = engFile.readLine()) != null){
-			if(line.indexOf(word) > -1)
-				lines.add(i);
-			i++;
-		}
-		/*
-		* now, get dupeless list of all german words on those lines
-		* the i variable now keeps track of your place in the lines list
-		*/
-		i = 0;
-		int j = 0;
-		while((line = forFile.readLine()) != null){
-			if(i < lines.size() && j == lines.get(i) || word.equals("_NULL_")){
-				String[] words = line.split(" ");
-				for(String f : words){
-					emissions.put(f, 0);
+		while((eline = engFile.readLine()) != null){
+			fline = forFile.readLine();
+			for(String e : eline.split(" ")){
+				if(!emissions.containsKey(e))
+					emissions.put(e, new HashMap());
+				for(String f : fline.split(" ")){
+					emissions.get(e).put(f, -1.0);
 				}
-				i++;
 			}
-			j++;
 		}
-		return (emissions.size() > 0) ? 1.0 / emissions.size() : 0;
+		return emissions;
 	}
-/*
+	/*
 	public static HashMap<String, HashMap<String, Double>> emAlg(int iterations) throws IOException{
-		HashMap<String, HashMap<String, Double>> params = new HashMap();
+		HashMap<String, HashMap<String, Double>> params = initialTs();
 		for(int its = 0; its < iterations; its++){//for s = 1..S
 			BufferedReader engFile = new BufferedReader(new FileReader(eFName));
 			BufferedReader forFile = new BufferedReader(new FileReader(fFName));
@@ -55,7 +43,6 @@ public class Prob4{
 				for(String f : fline.split(" ")){//for i = 1..mk
 					int j = 0; //english word index
 					for(String e : eline.split(" ")){//for j = 0..lk
-						double t = initialT(e);
 
 						j++;
 					}
@@ -75,5 +62,6 @@ public class Prob4{
 		//make readers for english and german corpora
 		eFName = args[0];
 		fFName = args[1];
+		System.out.println(1.0 / initialTs().get("resumption").size());
 	}
 }
