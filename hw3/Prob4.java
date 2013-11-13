@@ -40,26 +40,32 @@ public class Prob4{
 	public static HashMap<String, EMRecord> emAlg(int iterations) throws IOException{
 		HashMap<String, EMRecord> params = initialTs();
 
-		for(int its = 0; its < iterations; its++){//for s = 1..S
+		for(int its = 1; its <= iterations; its++){//for s = 1..S
+			stdout.println("Starting iteration "+its);
 			BufferedReader engFile = new BufferedReader(new FileReader(eFName));
 			BufferedReader forFile = new BufferedReader(new FileReader(fFName));
 			String eline, fline;
+			int k = 1;
 			while((eline = engFile.readLine()) != null){//for k = 1..n
 				fline = forFile.readLine();
+				if(k % 2000 == 0)
+					stdout.println("On line "+k);
 				int i = 0; //foreign word index
 				for(String f : fline.split(" ")){//for i = 1..mk
 					int j = 0; //english word index
+					double denom = 0;
+					for(String e : eline.split(" ")){
+						denom += params.get(e).getT(f);
+					}
 					for(String e : eline.split(" ")){//for j = 0..lk
-						double delta = params.get(e).getT(f);
+						double delta = (denom > 0) ? params.get(e).getT(f) / denom : 0;
 						params.get(e).increment(f, delta);
 						params.get(e).updateT(f, params.get(e).getCEF(f) / params.get(e).getCE());
 						j++;
-						break;
 					}
 					i++;
-					break;
 				}
-				break;
+				k++;
 			}
 			for(String e : params.keySet()){
 				params.get(e).reset();
@@ -77,6 +83,7 @@ public class Prob4{
 		//make readers for english and german corpora
 		eFName = args[0];
 		fFName = args[1];
-		emAlg(1);
+		HashMap<String, EMRecord> result = emAlg(1);
+		stdout.println(result.get("roth"));
 	}
 }
