@@ -90,7 +90,7 @@ public class Prob4{
 
 	public static void printAlignment(String eline, String fline, HashMap<String, EMRecord> params){
 		String[] fWords = fline.split(" ");
-		String[] eWords = eline.split(" ");
+		String[] eWords = ("_NULL_ "+eline).split(" ");//make sure to get _NULL_ in there
 		int[] a = new int[fWords.length];
 		for(int i = 0; i < fWords.length; i++){
 			double maxT = 0;
