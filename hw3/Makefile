@@ -1,6 +1,6 @@
 JAVA = javac
 
-Prob4.class: Prob4.java
+Prob4.class: Prob4.java EMRecord.java EMParam1.java
 	$(JAVA) Prob4.java
 
 PHONY: clean
