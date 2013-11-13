@@ -1,4 +1,4 @@
-import java.util.HashMap;
+import java.util.*;
 
 public class EMRecord{
 	HashMap<String, EMParam1> dict;
@@ -7,6 +7,21 @@ public class EMRecord{
 	public EMRecord(){
 		dict = new HashMap();
 		ce = 0;
+	}
+
+	public List<EMParam1> sort(){
+		List<EMParam1> emrs = new ArrayList<EMParam1>(dict.values());
+		Collections.sort(emrs, new Comparator<EMParam1>(){
+			public int compare(EMParam1 em1, EMParam1 em2){
+				if(em1.tParam > em2.tParam)
+					return -1;
+				else if(em1.tParam < em2.tParam)
+					return 1;
+				else
+					return 0;
+			}
+		});
+		return emrs;
 	}
 
 	public int size(){ return dict.size(); }

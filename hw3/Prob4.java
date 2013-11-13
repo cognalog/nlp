@@ -5,6 +5,7 @@ import java.io.*;
 public class Prob4{
 	static String eFName;
 	static String fFName;
+	static String tFName;
 	static PrintStream stdout = System.out;
 
 	/*
@@ -24,8 +25,8 @@ public class Prob4{
 				if(!emissions.containsKey(e))
 					emissions.put(e, new EMRecord());
 				for(String f : fline.split(" ")){
-					emissions.get("_NULL_").set(f, new EMParam1());
-					emissions.get(e).set(f, new EMParam1());
+					emissions.get("_NULL_").set(f, new EMParam1("_NULL_"));
+					emissions.get(e).set(f, new EMParam1(f));
 				}
 			}
 		}
@@ -60,7 +61,7 @@ public class Prob4{
 					for(String e : eline.split(" ")){//for j = 0..lk
 						double delta = (denom > 0) ? params.get(e).getT(f) / denom : 0;
 						params.get(e).increment(f, delta);
-						params.get(e).updateT(f, params.get(e).getCEF(f) / params.get(e).getCE());
+						params.get(e).updateT(f, (params.get(e).getCE() > 0) ? params.get(e).getCEF(f) / params.get(e).getCE() : 0);
 						j++;
 					}
 					i++;
@@ -75,15 +76,64 @@ public class Prob4{
 		return params;
 	}
 
+	public static void printTop10(String word, HashMap<String, EMRecord> params){
+		stdout.println(word + ":");
+		int i = 0;
+		for(EMParam1 em : params.get(word).sort()){
+			if(i == 10)
+				break;
+			stdout.println(em.getWord() + " " + em.tParam);
+			i++;
+		}
+		stdout.println();
+	}
+
+	public static void printAlignment(String eline, String fline, HashMap<String, EMRecord> params){
+		String[] fWords = fline.split(" ");
+		String[] eWords = eline.split(" ");
+		int[] a = new int[fWords.length];
+		for(int i = 0; i < fWords.length; i++){
+			double maxT = 0;
+			for(int j = 0; j < eWords.length; j++){
+				double t = params.get(eWords[j]).getT(fWords[i]);
+				if(t > maxT){
+					a[i] = j;
+					maxT = t;
+				}
+			}
+		}
+		stdout.print("[");
+		for(int i : a){
+			stdout.print(i+",");
+		}
+		stdout.println("]");
+	}
+
 	public static void main(String[] args) throws IOException{
-		if(args.length < 2){
-			stdout.println("usage: java Prob4 <english_corpus> <german_corpus>");
+		if(args.length != 4 || !args[3].equals("top10") && !args[3].equals("align")){
+			stdout.println("usage: java Prob4 <english_corpus> <german_corpus> <test_words> <operation ('top10' or 'align')>");
 			return;
 		}
 		//make readers for english and german corpora
 		eFName = args[0];
 		fFName = args[1];
-		HashMap<String, EMRecord> result = emAlg(1);
-		stdout.println(result.get("roth"));
+		tFName = args[2];
+		HashMap<String, EMRecord> params = emAlg(5);
+		if(args[3].equals("top10")){
+			//go through the test_words file, printing top 10
+			BufferedReader testFile = new BufferedReader(new FileReader(tFName));
+			String line;
+			while((line = testFile.readLine()) != null){
+				printTop10(line, params);
+			}
+		}
+		else{
+			BufferedReader engFile = new BufferedReader(new FileReader(eFName));
+			BufferedReader forFile = new BufferedReader(new FileReader(fFName));
+			String eline, fline;
+			for(int i = 0; i < 20; i++){
+				printAlignment(engFile.readLine(), forFile.readLine(), params);
+			}
+		}
 	}
 }
