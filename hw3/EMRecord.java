@@ -30,6 +30,8 @@ public class EMRecord{
 
 	public double getCEF(String f){ return dict.get(f).cef; }
 
+	public HashMap<String, EMParam1> getDict() { return dict; }
+
 	public double getT(String key){ return dict.get(key).tParam; }
 
 	public void set(String key, EMParam1 value){ dict.put(key, value); }

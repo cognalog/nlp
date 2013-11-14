@@ -42,15 +42,15 @@ public class Prob4{
 		HashMap<String, EMRecord> params = initialTs();
 
 		for(int its = 1; its <= iterations; its++){//for s = 1..S
-			stdout.println("Starting iteration "+its);
+			//stdout.println("Starting iteration "+its);
 			BufferedReader engFile = new BufferedReader(new FileReader(eFName));
 			BufferedReader forFile = new BufferedReader(new FileReader(fFName));
 			String eline, fline;
 			int k = 1;
 			while((eline = engFile.readLine()) != null){//for k = 1..n
 				fline = forFile.readLine();
-				if(k % 2000 == 0)
-					stdout.println("On line "+k);
+				/*if(k % 2000 == 0)
+					stdout.println("On line "+k);*/
 				int i = 0; //foreign word index
 				for(String f : fline.split(" ")){//for i = 1..mk
 					int j = 0; //english word index
@@ -110,15 +110,16 @@ public class Prob4{
 	}
 
 	public static void main(String[] args) throws IOException{
-		if(args.length != 4 || !args[3].equals("top10") && !args[3].equals("align")){
-			stdout.println("usage: java Prob4 <english_corpus> <german_corpus> <test_words> <operation ('top10' or 'align')>");
+		String options = "top10,align,serve";
+		if(args.length != 4 || options.indexOf(args[3]) == -1){
+			stdout.println("usage: java Prob4 <english_corpus> <foreign_corpus> <test_words> <operation ('top10' or 'align' or 'serve')>");
 			return;
 		}
 		//make readers for english and german corpora
 		eFName = args[0];
 		fFName = args[1];
 		tFName = args[2];
-		HashMap<String, EMRecord> params = emAlg(5);
+		HashMap<String, EMRecord> params = emAlg(1); //CHANGE BACK TO 5
 		if(args[3].equals("top10")){
 			//go through the test_words file, printing top 10
 			BufferedReader testFile = new BufferedReader(new FileReader(tFName));
@@ -127,12 +128,20 @@ public class Prob4{
 				printTop10(line, params);
 			}
 		}
-		else{
+		else if(args[3].equals("align"))
+		{
 			BufferedReader engFile = new BufferedReader(new FileReader(eFName));
 			BufferedReader forFile = new BufferedReader(new FileReader(fFName));
 			String eline, fline;
 			for(int i = 0; i < 20; i++){
 				printAlignment(engFile.readLine(), forFile.readLine(), params);
+			}
+		}
+		else{//serve the t params to stdout
+			for(String e : params.keySet()){
+				for(String f : params.get(e).getDict().keySet()){
+					stdout.println(f+"_"+e+"~"+params.get(e).getT(f));
+				}
 			}
 		}
 	}
