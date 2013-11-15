@@ -39,16 +39,15 @@ public class Prob5{
 		else
 			counts.put(key, by);
 	}
-
-	public static HashMap<String, Double> emAlg(int iterations) throws IOException{
-		HashMap<String, Double> tAndq = getTs(); //assumes no key conflicts between f_e and i_j_l_m
-		HashMap<String, Double> counts = new HashMap();
+	
+	public static double[][][][] emAlg(int iterations) throws IOException{
+		double[][][][] qParams = new double[40][40][40][40];
+		HashMap<String, Double> tParams = getTs();
+		double[][][][] qCounts = new double[40][40][40][41];
+		HashMap<String, HashMap<String, Double>> tCounts = new HashMap();
 
 		for(int its = 1; its <= iterations; its++){
 			//reset all stored counts to 0
-			for(String k : counts.keySet()){
-				counts.put(k, 0.0);
-			}
 			BufferedReader eReader = new BufferedReader(new FileReader(eFile));
 			BufferedReader fReader = new BufferedReader(new FileReader(fFile));
 			String eline, fline;
@@ -58,21 +57,23 @@ public class Prob5{
 					stdout.println("on line "+k);
 				String[] eWords = eline.split(" ");
 				String[] fWords = fReader.readLine().split(" ");//assumes corpora are equally long
+				int l = eWords.length;
+				int m = fWords.length;
 				for(int i = 0; i < fWords.length; i++){
 					//calculate denominator for delta
 					double denom = 0;
 					for(int j = 0; j < eWords.length; j++){
-						String qKey = makeKey(""+j,""+i,""+eWords.length,""+fWords.length);
+						//String qKey = makeKey(""+j,""+i,""+eWords.length,""+fWords.length);
 						String tKey = makeKey(fWords[i],eWords[j]);
-						if(!tAndq.containsKey(qKey))
-							tAndq.put(qKey, 1.0 / (eWords.length + 1));
-						denom += tAndq.get(qKey) * tAndq.get(tKey);//assumes this t param has been calculated in Prob4
-					}
+						if(qParams[j][i][l][m] == 0)
+							qParams[j][i][l][m] = 1.0 / (eWords.length + 1);
+						denom += qParams[j][i][l][m] * tParams.get(tKey);//assumes this t param has been calculated in Prob4
+					}/*
 					for(int j = 0; j < eWords.length; j++){
 						String qKey = makeKey(""+j,""+i,""+eWords.length,""+fWords.length);
 						String tKey = makeKey(fWords[i],eWords[j]);
 						//calculate delta
-						double delta = (denom > 0) ? tAndq.get(qKey) * tAndq.get(tKey) / denom : 0;
+						double delta = (denom > 0) ? tParams.get(qKey) * tParams.get(tKey) / denom : 0;
 						//increment counts by delta
 						String c1 = makeKey(fWords[i],eWords[j]);
 						increment(counts,delta,c1);
@@ -84,13 +85,13 @@ public class Prob5{
 						//update q and t
 						tAndq.put(qKey, counts.get(c3) / counts.get(c4));
 						tAndq.put(tKey, counts.get(c1) / counts.get(eWords[j]));
-					}
+					}*/
 				}
 				k++;
 			}
 		}
 		//finally...
-		return tAndq;
+		return qParams;
 	}
 
 	public static void main(String[] args) throws IOException{
@@ -98,17 +99,18 @@ public class Prob5{
 			stdout.println("usage: java Prob5 <english_corpus> <foreign_corpus> <tParams_file>");
 			return;
 		}
+
 		eFile = args[0];
 		fFile = args[1];
 		tFile = args[2];
-
-		int i = 0;
+		emAlg(1);
+		/*int i = 0;
 		HashMap<String, Double> params = emAlg(1);
 		for(String k : params.keySet()){
 			if(i >= 10)
 				break;
 			stdout.println(k+": "+params.get(k));
 			i++;
-		}
+		}*/
 	}
 }

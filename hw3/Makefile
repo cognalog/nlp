@@ -23,5 +23,5 @@ run4.2: Prob4.class data/corpus.en data/corpus.de data/devwords.txt
 
 #add ibm1.params to dependencies
 PHONY: run5
-run5: Prob5.class data/corpus.en data/corpus.de
+run5: Prob5.class data/corpus.en data/corpus.de data/ibm1.params
 	java Prob5 data/corpus.en data/corpus.de data/ibm1.params
