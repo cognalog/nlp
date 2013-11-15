@@ -85,10 +85,10 @@ public class Prob5{
 						//calculate delta
 						double delta = (denom > 0) ? qParams[j][i][l][m] * tParams.get(e).get(f) / denom : 0;
 						//increment counts by delta
-						tCounts.get(e).put(f, tCounts.get(e).get(f) + delta);
-						tCounts.get(e).put("~", tCounts.get(e).get("~") + delta);
-						qCounts[j][i][l][m] += delta;
-						qCounts[50][i][l][m] += delta;
+						tCounts.get(e).put(f, tCounts.get(e).get(f) + delta); //c(f,e)
+						tCounts.get(e).put("~", tCounts.get(e).get("~") + delta); //c(e)
+						qCounts[j][i][l][m] += delta; //c(j,i,l,m)
+						qCounts[50][i][l][m] += delta; //c(i,l,m)
 						//update q and t
 						tParams.get(e).put(f, tCounts.get(e).get(f) / tCounts.get(e).get("~"));
 						qParams[j][i][l][m] = qCounts[j][i][l][m] / qCounts[50][i][l][m];
@@ -110,7 +110,9 @@ public class Prob5{
 		eFile = args[0];
 		fFile = args[1];
 		tFile = args[2];
+		double time = System.currentTimeMillis();
 		emAlg(1);
+		stdout.println((System.currentTimeMillis() - time) / 60000);
 		/*int i = 0;
 		HashMap<String, Double> params = emAlg(1);
 		for(String k : params.keySet()){
