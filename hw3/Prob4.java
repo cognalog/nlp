@@ -53,7 +53,7 @@ public class Prob4{
 				for(String f : fline.split(" ")){//for i = 1..mk
 					int j = 0; //english word index
 					double denom = 0;
-					for(String e : eline.split(" ")){
+					for(String e : ("_NULL_ "+eline).split(" ")){
 						denom += params.get(e).getT(f);
 					}
 					for(String e : eline.split(" ")){//for j = 0..lk
@@ -132,7 +132,6 @@ public class Prob4{
 		{
 			BufferedReader engFile = new BufferedReader(new FileReader(args[0]));
 			BufferedReader forFile = new BufferedReader(new FileReader(args[1]));
-			String eline, fline;
 			for(int i = 0; i < 20; i++){
 				printAlignment(engFile.readLine(), forFile.readLine(), params);
 			}

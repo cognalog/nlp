@@ -3,7 +3,7 @@ JAVA = javac
 Prob4.class: Prob4.java EMRecord.java EMParam1.java
 	$(JAVA) Prob4.java
 
-Prob5.class: Prob5.java
+Prob5.class: Prob5.java Prob4.class EM2Result.java
 	$(JAVA) Prob5.java
 
 data/ibm1.params: Prob4.class

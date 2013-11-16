@@ -26,7 +26,7 @@ public class Prob5{
 			while((eline = eReader.readLine()) != null){
 				if(k % 2000 == 0)
 					stdout.println("on line "+k);
-				String[] eWords = eline.split(" ");
+				String[] eWords = ("_NULL_ "+eline).split(" ");
 				String[] fWords = fReader.readLine().split(" ");//assumes corpora are equally long
 				//set some variables to make our lives easier
 				int l = eWords.length;
@@ -39,9 +39,9 @@ public class Prob5{
 					for(int j = 0; j < l; j++){
 						if(qp[j][i] == 0)
 							qp[j][i] = 1.0 / (eWords.length + 1);
-						//stdout.println(tParams.get());
 						denom += qp[j][i] * tParams.get(eWords[j]).getT(fWords[i]);//assumes this t param has been calculated in Prob4
 					}
+
 					//update counts, then q and t
 					for(int j = 0; j < eWords.length; j++){
 						String e = eWords[j];
@@ -76,6 +76,13 @@ public class Prob5{
 		double time = System.currentTimeMillis();
 		EM2Result params = emAlg(5, args[0], args[1]);
 		stdout.println(params.tParams.get("resumption"));
-		stdout.println((System.currentTimeMillis() - time) / 1000);
+		stdout.println((System.currentTimeMillis() - time) / 1000 + " seconds elapsed");
+
+		//print best alignments for first 20 pairs
+		BufferedReader engFile = new BufferedReader(new FileReader(args[0]));
+		BufferedReader forFile = new BufferedReader(new FileReader(args[1]));
+		for(int i = 0; i < 20; i++){
+			stdout.println(params.maxAlignment(engFile.readLine(), forFile.readLine()));
+		}
 	}
 }
