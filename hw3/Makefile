@@ -21,7 +21,11 @@ PHONY: run4.2
 run4.2: Prob4.class data/corpus.en data/corpus.de data/devwords.txt
 	java Prob4 data/corpus.en data/corpus.de data/devwords.txt align
 
+PHONY: time4
+time4: Prob4.class data/corpus.en data/corpus.de data/devwords.txt
+	java Prob4 data/corpus.en data/corpus.de data/devwords.txt time
+
 #add ibm1.params to dependencies
 PHONY: run5
 run5: Prob5.class data/corpus.en data/corpus.de
-	java Prob5 data/corpus.en data/corpus.de data/ibm1.params
+	java Prob5 data/corpus.en data/corpus.de

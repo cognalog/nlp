@@ -3,21 +3,19 @@ import java.util.HashMap;
 import java.io.*;
 
 public class Prob4{
-	static String eFName;
-	static String fFName;
 	static String tFName;
 	static PrintStream stdout = System.out;
 
 	/*
 	* gives an initial value for t(f | e) for a particular e regardless of f
 	*/
-	private static HashMap<String, EMRecord> initialTs() throws IOException{
-		BufferedReader engFile = new BufferedReader(new FileReader(eFName));
-		BufferedReader forFile = new BufferedReader(new FileReader(fFName));
+	private static HashMap<String, EMRecord> initialTs(String eFile, String fFile) throws IOException{
+		BufferedReader engFile = new BufferedReader(new FileReader(eFile));
+		BufferedReader forFile = new BufferedReader(new FileReader(fFile));
 		HashMap<String, EMRecord> emissions = new HashMap();
 		emissions.put("_NULL_", new EMRecord());
 		String eline, fline;
-
+		stdout.println("Getting initial t parameters");
 		//fully initialize the emissions structure
 		while((eline = engFile.readLine()) != null){
 			fline = forFile.readLine();
@@ -38,19 +36,19 @@ public class Prob4{
 		return emissions;
 	}
 	
-	public static HashMap<String, EMRecord> emAlg(int iterations) throws IOException{
-		HashMap<String, EMRecord> params = initialTs();
-
+	public static HashMap<String, EMRecord> emAlg(int iterations, String eFile, String fFile) throws IOException{
+		HashMap<String, EMRecord> params = initialTs(eFile, fFile);
+		stdout.println("Running IBM Model 1:");
 		for(int its = 1; its <= iterations; its++){//for s = 1..S
-			//stdout.println("Starting iteration "+its);
-			BufferedReader engFile = new BufferedReader(new FileReader(eFName));
-			BufferedReader forFile = new BufferedReader(new FileReader(fFName));
+			stdout.println("Starting iteration "+its);
+			BufferedReader engFile = new BufferedReader(new FileReader(eFile));
+			BufferedReader forFile = new BufferedReader(new FileReader(fFile));
 			String eline, fline;
 			int k = 1;
 			while((eline = engFile.readLine()) != null){//for k = 1..n
 				fline = forFile.readLine();
-				/*if(k % 2000 == 0)
-					stdout.println("On line "+k);*/
+				if(k % 2000 == 0)
+					stdout.println("On line "+k);
 				int i = 0; //foreign word index
 				for(String f : fline.split(" ")){//for i = 1..mk
 					int j = 0; //english word index
@@ -110,16 +108,18 @@ public class Prob4{
 	}
 
 	public static void main(String[] args) throws IOException{
-		String options = "top10,align,serve";
+		String options = "top10,align,serve,time";
 		if(args.length != 4 || options.indexOf(args[3]) == -1){
-			stdout.println("usage: java Prob4 <english_corpus> <foreign_corpus> <test_words> <operation ('top10' or 'align' or 'serve')>");
+			stdout.println("usage: java Prob4 <english_corpus> <foreign_corpus> <test_words> <operation ('top10', 'align', 'serve' or 'time')>");
 			return;
 		}
 		//make readers for english and german corpora
-		eFName = args[0];
-		fFName = args[1];
+		//eFName = args[0];
+		//fFName = args[1];
 		tFName = args[2];
-		HashMap<String, EMRecord> params = emAlg(1); //CHANGE BACK TO 5
+		double time = System.currentTimeMillis();
+		HashMap<String, EMRecord> params = emAlg(1, args[0], args[1]); //CHANGE BACK TO 5
+
 		if(args[3].equals("top10")){
 			//go through the test_words file, printing top 10
 			BufferedReader testFile = new BufferedReader(new FileReader(tFName));
@@ -130,19 +130,21 @@ public class Prob4{
 		}
 		else if(args[3].equals("align"))
 		{
-			BufferedReader engFile = new BufferedReader(new FileReader(eFName));
-			BufferedReader forFile = new BufferedReader(new FileReader(fFName));
+			BufferedReader engFile = new BufferedReader(new FileReader(args[0]));
+			BufferedReader forFile = new BufferedReader(new FileReader(args[1]));
 			String eline, fline;
 			for(int i = 0; i < 20; i++){
 				printAlignment(engFile.readLine(), forFile.readLine(), params);
 			}
 		}
-		else{//serve the t params to stdout
+		else if(args[3].equals("serve")){//serve the t params to stdout
 			for(String e : params.keySet()){
 				for(String f : params.get(e).getDict().keySet()){
 					stdout.println(f+"_"+e+"~"+params.get(e).getT(f));
 				}
 			}
 		}
+		else
+			stdout.println((System.currentTimeMillis() - time) / 1000);
 	}
 }
