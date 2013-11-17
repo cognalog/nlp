@@ -4,7 +4,7 @@ import java.io.*;
 
 public class Prob4{
 	static String tFName;
-	static PrintStream stdout = System.out;
+	static final PrintStream stdout = System.out;
 
 	/*
 	* gives an initial value for t(f | e) for a particular e regardless of f

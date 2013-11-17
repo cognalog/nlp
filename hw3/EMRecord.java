@@ -32,7 +32,7 @@ public class EMRecord{
 
 	public HashMap<String, EMParam1> getDict() { return dict; }
 
-	public double getT(String key){ return dict.get(key).tParam; }
+	public double getT(String key){ return dict.containsKey(key) ? dict.get(key).tParam : 0; }
 
 	public void set(String key, EMParam1 value){ dict.put(key, value); }
 

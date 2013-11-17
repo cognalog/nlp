@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class Prob5{
-	static PrintStream stdout = System.out;
+	static final PrintStream stdout = System.out;
 	
 	public static EM2Result emAlg(int iterations, String eFile, String fFile) throws IOException{
 		double[][][][] qParams = new double[50][50][50][50]; //assumes max sentence length of 50 words
@@ -75,14 +75,18 @@ public class Prob5{
 
 		double time = System.currentTimeMillis();
 		EM2Result params = emAlg(5, args[0], args[1]);
-		stdout.println(params.tParams.get("resumption"));
 		stdout.println((System.currentTimeMillis() - time) / 1000 + " seconds elapsed");
 
 		//print best alignments for first 20 pairs
 		BufferedReader engFile = new BufferedReader(new FileReader(args[0]));
 		BufferedReader forFile = new BufferedReader(new FileReader(args[1]));
 		for(int i = 0; i < 20; i++){
-			stdout.println(params.maxAlignment(engFile.readLine(), forFile.readLine()));
+			String eline = engFile.readLine();
+			String fline = forFile.readLine();
+			stdout.println(eline);
+			stdout.println(fline);
+			stdout.println(params.argMaxAlignment(eline, fline));
+			stdout.println();
 		}
 	}
 }

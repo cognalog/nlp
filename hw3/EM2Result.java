@@ -9,17 +9,17 @@ public class EM2Result{
 		tParams = t;
 	}
 
-	public String maxAlignment(String eline, String fline){
+	public String argMaxAlignment(String eline, String fline){
 		String[] fWords = fline.split(" ");
 		String[] eWords = ("_NULL_ "+eline).split(" ");//make sure to get _NULL_ in there
 		int[] a = new int[fWords.length];
 		for(int i = 0; i < fWords.length; i++){
 			double maxT = 0;
 			for(int j = 0; j < eWords.length; j++){
-				double t = tParams.get(eWords[j]).getT(fWords[i]) * qParams[eWords.length][fWords.length][j][i];
-				if(t > maxT){
+				double tq = tParams.get(eWords[j]).getT(fWords[i]) * qParams[eWords.length][fWords.length][j][i];
+				if(tq > maxT){
 					a[i] = j;
-					maxT = t;
+					maxT = tq;
 				}
 			}
 		}
@@ -32,5 +32,23 @@ public class EM2Result{
 		result += "]";
 
 		return result;
+	}
+
+	public double maxAlignment(String eline, String fline){
+		String[] fWords = fline.split(" ");
+		String[] eWords = ("_NULL_ "+eline).split(" ");//make sure to get _NULL_ in there
+		double total = 0;
+		for(int i = 0; i < fWords.length; i++){
+			double maxT = 0;
+			for(int j = 0; j < eWords.length; j++){
+				double tq = tParams.containsKey(eWords[j]) ? tParams.get(eWords[j]).getT(fWords[i]) * qParams[eWords.length][fWords.length][j][i] : 0;
+				if(tq > maxT)
+					maxT = tq;
+			}
+			//maxT is now the highest q*t for a matching english word
+			total += (maxT > 0) ? -1 * Math.log(maxT) : -9999999;
+		}
+
+		return total;
 	}
 }
