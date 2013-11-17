@@ -36,17 +36,18 @@ public class EM2Result{
 
 	public double maxAlignment(String eline, String fline){
 		String[] fWords = fline.split(" ");
-		String[] eWords = ("_NULL_ "+eline).split(" ");//make sure to get _NULL_ in there
+		String[] eWords = ("_NULL_ "+eline).split(" ");
 		double total = 0;
 		for(int i = 0; i < fWords.length; i++){
 			double maxT = 0;
 			for(int j = 0; j < eWords.length; j++){
-				double tq = tParams.containsKey(eWords[j]) ? tParams.get(eWords[j]).getT(fWords[i]) * qParams[eWords.length][fWords.length][j][i] : 0;
+				double q = qParams[eWords.length][fWords.length][j][i];
+				double tq = tParams.containsKey(eWords[j]) &&  tParams.get(eWords[j]).getT(fWords[i]) > 0 ? tParams.get(eWords[j]).getT(fWords[i]) * q	: q * q;
 				if(tq > maxT)
 					maxT = tq;
 			}
 			//maxT is now the highest q*t for a matching english word
-			total += (maxT > 0) ? -1 * Math.log(maxT) : -9999999;
+			total += (maxT > 0) ? -1 * Math.log(maxT) : -999999;
 		}
 
 		return total;

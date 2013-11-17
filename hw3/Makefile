@@ -6,8 +6,11 @@ Prob4.class: Prob4.java EMRecord.java EMParam1.java
 Prob5.class: Prob5.java Prob4.class EM2Result.java
 	$(JAVA) Prob5.java
 
-Prob6.class: Prob5.class
+Prob6.class: Prob6.java Prob5.class
 	$(JAVA) Prob6.java
+
+data/unscrambled.en: Prob6.class data/corpus.en data/corpus.de data/scrambled.en data/original.de
+	java Prob6 data/corpus.en data/corpus.de data/scrambled.en data/original.de > data/unscrambled.en
 
 PHONY: clean
 clean:
@@ -32,3 +35,7 @@ run5: Prob5.class data/corpus.en data/corpus.de
 PHONY: run6
 run6: Prob6.class data/corpus.en data/corpus.de data/scrambled.en data/original.de
 	java Prob6 data/corpus.en data/corpus.de data/scrambled.en data/original.de
+
+PHONY: eval
+eval: data/eval_scramble.py data/unscrambled.en data/original.en
+	python data/eval_scramble.py data/unscrambled.en data/original.en

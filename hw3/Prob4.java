@@ -15,7 +15,7 @@ public class Prob4{
 		HashMap<String, EMRecord> emissions = new HashMap();
 		emissions.put("_NULL_", new EMRecord());
 		String eline, fline;
-		stdout.println("Getting initial t parameters");
+		//stdout.println("Getting initial t parameters");
 		//fully initialize the emissions structure
 		while((eline = engFile.readLine()) != null){
 			fline = forFile.readLine();
@@ -38,20 +38,20 @@ public class Prob4{
 	
 	public static HashMap<String, EMRecord> emAlg(int iterations, String eFile, String fFile) throws IOException{
 		HashMap<String, EMRecord> params = initialTs(eFile, fFile);
-		stdout.println("Running IBM Model 1:");
+		//stdout.println("Estimating t parameters with IBM Model 1:");
 		for(int its = 1; its <= iterations; its++){//for s = 1..S
 			for(String e : params.keySet()){
 				params.get(e).reset();
 			}
-			stdout.println("Starting iteration "+its);
+			//stdout.println("Starting iteration "+its);
 			BufferedReader engFile = new BufferedReader(new FileReader(eFile));
 			BufferedReader forFile = new BufferedReader(new FileReader(fFile));
 			String eline, fline;
 			int k = 1;
 			while((eline = engFile.readLine()) != null){//for k = 1..n
 				fline = forFile.readLine();
-				if(k % 2000 == 0)
-					stdout.println("On line "+k);
+				//if(k % 2000 == 0)
+				//	stdout.println("On line "+k);
 				for(String f : fline.split(" ")){//for i = 1..mk
 					//calculate denominator for delta
 					double denom = 0;

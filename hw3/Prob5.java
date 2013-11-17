@@ -8,10 +8,10 @@ public class Prob5{
 		double[][][][] qParams = new double[50][50][50][50]; //assumes max sentence length of 50 words
 		HashMap<String, EMRecord> tParams = Prob4.emAlg(iterations, eFile, fFile);
 		double[][][][] qCounts;
-		stdout.println("Running IBM Model 2:");
+		//stdout.println("Estimating t and q parameters with IBM Model 2:");
 
 		for(int its = 1; its <= iterations; its++){
-			stdout.println("Starting iteration "+its);
+			//stdout.println("Starting iteration "+its);
 			//reset all stored counts to 0
 			for(String e : tParams.keySet()){
 				tParams.get(e).reset();
@@ -24,8 +24,8 @@ public class Prob5{
 			String eline, fline;
 			int k = 1;
 			while((eline = eReader.readLine()) != null){
-				if(k % 2000 == 0)
-					stdout.println("on line "+k);
+				//if(k % 2000 == 0)
+				//	stdout.println("on line "+k);
 				String[] eWords = ("_NULL_ "+eline).split(" ");
 				String[] fWords = fReader.readLine().split(" ");//assumes corpora are equally long
 				//set some variables to make our lives easier
