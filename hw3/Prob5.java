@@ -16,7 +16,7 @@ public class Prob5{
 			for(String e : tParams.keySet()){
 				tParams.get(e).reset();
 			}
-			qCounts = new double[50][50][51][50];
+			qCounts = new double[50][50][51][50]; //the order is l, m, j, i
 
 			//proceed to read
 			BufferedReader eReader = new BufferedReader(new FileReader(eFile));
@@ -51,7 +51,6 @@ public class Prob5{
 
 						//increment counts by delta
 						tParams.get(e).increment(f, delta);
-						tParams.get(e).updateT(f, (tParams.get(e).getCE() > 0) ? tParams.get(e).getCEF(f) / tParams.get(e).getCE() : 0);
 						qc[j][i] += delta; //c(j,i,l,m)
 						qc[50][i] += delta; //c(i,l,m)
 
@@ -75,7 +74,7 @@ public class Prob5{
 
 		double time = System.currentTimeMillis();
 		EM2Result params = emAlg(5, args[0], args[1]);
-		stdout.println((System.currentTimeMillis() - time) / 1000 + " seconds elapsed");
+		//stdout.println((System.currentTimeMillis() - time) / 1000 + " seconds elapsed");
 
 		//print best alignments for first 20 pairs
 		BufferedReader engFile = new BufferedReader(new FileReader(args[0]));

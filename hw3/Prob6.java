@@ -17,7 +17,7 @@ public class Prob6{
 		String eline, fline;
 		while((fline = fReader.readLine()) != null){
 			BufferedReader eReader = new BufferedReader(new FileReader(args[2]));
-			double max = -999;
+			double max = Double.NEGATIVE_INFINITY;
 			String maxE = "nothing to see here!";
 
 			//get english sentence with the most probable alignment
@@ -29,7 +29,7 @@ public class Prob6{
 					maxE = eline;
 				}
 			}
-			stdout.println(maxE+" "+max);
+			stdout.println(maxE);
 			//break;
 		}
 		//stdout.println((System.currentTimeMillis() - time) / 1000 + " seconds elapsed");

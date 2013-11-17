@@ -3,7 +3,6 @@ import java.util.HashMap;
 import java.io.*;
 
 public class Prob4{
-	static String tFName;
 	static final PrintStream stdout = System.out;
 
 	/*
@@ -59,7 +58,7 @@ public class Prob4{
 						denom += params.get(e).getT(f);
 					}
 					//estimate t parameter
-					for(String e : eline.split(" ")){//for j = 0..lk
+					for(String e : ("_NULL_ "+eline).split(" ")){//for j = 0..lk
 						double delta = (denom > 0) ? params.get(e).getT(f) / denom : 0;
 						params.get(e).increment(f, delta);
 						params.get(e).updateT(f, (params.get(e).getCE() > 0) ? params.get(e).getCEF(f) / params.get(e).getCE() : 0);
@@ -99,8 +98,11 @@ public class Prob4{
 			}
 		}
 		stdout.print("[");
-		for(int i : a){
-			stdout.print(i+",");
+		for(int i = 0; i < a.length; i++){
+			if(i + 1 == a.length)
+				stdout.print(a[i]);
+			else
+				stdout.print(a[i]+", ");
 		}
 		stdout.println("]");
 	}
@@ -111,27 +113,31 @@ public class Prob4{
 			stdout.println("usage: java Prob4 <english_corpus> <foreign_corpus> <test_words> <operation ('top10', 'align' or 'time')>");
 			return;
 		}
-		//make readers for english and german corpora
-		//eFName = args[0];
-		//fFName = args[1];
-		tFName = args[2];
+
 		double time = System.currentTimeMillis();
 		HashMap<String, EMRecord> params = emAlg(5, args[0], args[1]); //CHANGE BACK TO 5
 
+		//the first question 4 deliverable: best 10 matches for given english words
 		if(args[3].equals("top10")){
 			//go through the test_words file, printing top 10
-			BufferedReader testFile = new BufferedReader(new FileReader(tFName));
+			BufferedReader testFile = new BufferedReader(new FileReader(args[2]));
 			String line;
 			while((line = testFile.readLine()) != null){
 				printTop10(line, params);
 			}
 		}
+		//the second question 4 deliverable: alignments for the first 20 sentences
 		else if(args[3].equals("align"))
 		{
 			BufferedReader engFile = new BufferedReader(new FileReader(args[0]));
 			BufferedReader forFile = new BufferedReader(new FileReader(args[1]));
 			for(int i = 0; i < 20; i++){
-				printAlignment(engFile.readLine(), forFile.readLine(), params);
+				String eline = engFile.readLine();
+				String fline = forFile.readLine();
+				stdout.println(eline);
+				stdout.println(fline);
+				printAlignment(eline, fline, params);
+				stdout.println();
 			}
 		}
 		else

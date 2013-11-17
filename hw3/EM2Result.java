@@ -25,13 +25,30 @@ public class EM2Result{
 		}
 
 		//stringify that ho
-		String result = "[ ";
-		for(int i : a){
-			result += i+" ";
+		String result = "[";
+		for(int i = 0; i < a.length; i++){
+			if(i + 1 == a.length)
+				result += a[i];
+			else
+				result += a[i]+", ";
 		}
 		result += "]";
 
 		return result;
+	}
+
+	public double getT(String eWord, String fWord){
+		if(!tParams.containsKey(eWord))//eword has not been seen
+			eWord = "_NULL_";
+		try{
+			return tParams.get(eWord).getT(fWord);
+		}
+		catch(Exception e){//no match for eword and fword
+			if(eWord == "_NULL_") //fword is not in the model
+				return -1.0; //signal outer equation to just use q
+			else
+				return 0.0;
+		}
 	}
 
 	public double maxAlignment(String eline, String fline){
@@ -41,8 +58,9 @@ public class EM2Result{
 		for(int i = 0; i < fWords.length; i++){
 			double maxT = 0;
 			for(int j = 0; j < eWords.length; j++){
+				double t = getT(eWords[j], fWords[i]);
 				double q = qParams[eWords.length][fWords.length][j][i];
-				double tq = tParams.containsKey(eWords[j]) &&  tParams.get(eWords[j]).getT(fWords[i]) > 0 ? tParams.get(eWords[j]).getT(fWords[i]) * q	: q * q;
+				double tq = (t > -1) ? t * q : q * q;
 				if(tq > maxT)
 					maxT = tq;
 			}

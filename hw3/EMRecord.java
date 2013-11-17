@@ -48,7 +48,7 @@ public class EMRecord{
 
 	public void increment(String f, double by){
 		ce += by;
-		dict.get(f).cef += by;//fun fact: I spent hours on semantic debugging when this += was a = all along
+		dict.get(f).cef += by;
 	}
 
 	public void reset(){

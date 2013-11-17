@@ -1,0 +1,42 @@
+****************
+Running the Code
+****************
+-I set up a Makefile to facilitate running the code.  Of course you don't have to use it if you don't want to, but I'll be describing how to use it.
+-using the Makefile to solve the 3 questions:
+	-Question 4:
+		-relevant code is in Prob4.java, EMRecord.java, and EMParam1.java
+		-output for first bullet point (top 10 matching german words) is in data/dev.matches
+			-generate by running "make data/dev.matches" in terminal
+		-output for 2nd bullet point (alignments for first 20 pairs) is in data/ibm1.aligns
+			-generate by running "make data/ibm1.aligns" in terminal
+	-Question 5:
+		-relevant code is in Prob5.java, EM2Result.java
+		-output is in data/ibm2.aligns
+			-generate by running "make data/ibm2.aligns" in terminal
+	-Question 6:
+		-relevant code is in Prob6.java, EM2Result.java
+		-output is in data/unscrambled.en
+			-generate by running "make data/unscrambled.en" in terminal
+		-to print evaluation to console, run "make eval"
+	-to get rid of any artifacts, run "make clean"
+
+**********************
+Performance/Efficiency
+**********************
+-Question 4 (IBM Model 1)
+	-44 seconds for 5 iterations
+	-resulting alignments resemble sample
+		-eyeball estimate: 50%
+
+-Question 5 (IBM Model 2)
+	-81 seconds for 5 iterations
+	-resulting alignments resemble sample
+-Question 6
+	-6 seconds once IBM Model 2 is done
+	-5% accuracy :(
+
+************
+Observations
+************
+-Question 6
+	-one issue was what to do with english or french words not seen in the corpora
