@@ -6,12 +6,9 @@ Prob4.class: Prob4.java EMRecord.java EMParam1.java
 Prob5.class: Prob5.java Prob4.class EM2Result.java
 	$(JAVA) Prob5.java
 
-data/ibm1.params: Prob4.class
-	java Prob4 data/corpus.en data/corpus.de data/devwords.txt serve > data/ibm1.params
-
 PHONY: clean
 clean:
-	rm *.class data/*.params
+	rm *.class
 
 PHONY: run4.1
 run4.1: Prob4.class data/corpus.en data/corpus.de data/devwords.txt
@@ -25,7 +22,6 @@ PHONY: time4
 time4: Prob4.class data/corpus.en data/corpus.de data/devwords.txt
 	java Prob4 data/corpus.en data/corpus.de data/devwords.txt time
 
-#add ibm1.params to dependencies
 PHONY: run5
 run5: Prob5.class data/corpus.en data/corpus.de
 	java Prob5 data/corpus.en data/corpus.de

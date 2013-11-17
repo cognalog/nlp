@@ -40,6 +40,9 @@ public class Prob4{
 		HashMap<String, EMRecord> params = initialTs(eFile, fFile);
 		stdout.println("Running IBM Model 1:");
 		for(int its = 1; its <= iterations; its++){//for s = 1..S
+			for(String e : params.keySet()){
+				params.get(e).reset();
+			}
 			stdout.println("Starting iteration "+its);
 			BufferedReader engFile = new BufferedReader(new FileReader(eFile));
 			BufferedReader forFile = new BufferedReader(new FileReader(fFile));
@@ -49,25 +52,20 @@ public class Prob4{
 				fline = forFile.readLine();
 				if(k % 2000 == 0)
 					stdout.println("On line "+k);
-				int i = 0; //foreign word index
 				for(String f : fline.split(" ")){//for i = 1..mk
-					int j = 0; //english word index
+					//calculate denominator for delta
 					double denom = 0;
 					for(String e : ("_NULL_ "+eline).split(" ")){
 						denom += params.get(e).getT(f);
 					}
+					//estimate t parameter
 					for(String e : eline.split(" ")){//for j = 0..lk
 						double delta = (denom > 0) ? params.get(e).getT(f) / denom : 0;
 						params.get(e).increment(f, delta);
 						params.get(e).updateT(f, (params.get(e).getCE() > 0) ? params.get(e).getCEF(f) / params.get(e).getCE() : 0);
-						j++;
 					}
-					i++;
 				}
 				k++;
-			}
-			for(String e : params.keySet()){
-				params.get(e).reset();
 			}
 		}
 		
@@ -108,9 +106,9 @@ public class Prob4{
 	}
 
 	public static void main(String[] args) throws IOException{
-		String options = "top10,align,serve,time";
+		String options = "top10,align,time";
 		if(args.length != 4 || options.indexOf(args[3]) == -1){
-			stdout.println("usage: java Prob4 <english_corpus> <foreign_corpus> <test_words> <operation ('top10', 'align', 'serve' or 'time')>");
+			stdout.println("usage: java Prob4 <english_corpus> <foreign_corpus> <test_words> <operation ('top10', 'align' or 'time')>");
 			return;
 		}
 		//make readers for english and german corpora
@@ -118,7 +116,7 @@ public class Prob4{
 		//fFName = args[1];
 		tFName = args[2];
 		double time = System.currentTimeMillis();
-		HashMap<String, EMRecord> params = emAlg(1, args[0], args[1]); //CHANGE BACK TO 5
+		HashMap<String, EMRecord> params = emAlg(5, args[0], args[1]); //CHANGE BACK TO 5
 
 		if(args[3].equals("top10")){
 			//go through the test_words file, printing top 10
@@ -134,13 +132,6 @@ public class Prob4{
 			BufferedReader forFile = new BufferedReader(new FileReader(args[1]));
 			for(int i = 0; i < 20; i++){
 				printAlignment(engFile.readLine(), forFile.readLine(), params);
-			}
-		}
-		else if(args[3].equals("serve")){//serve the t params to stdout
-			for(String e : params.keySet()){
-				for(String f : params.get(e).getDict().keySet()){
-					stdout.println(f+"_"+e+"~"+params.get(e).getT(f));
-				}
 			}
 		}
 		else

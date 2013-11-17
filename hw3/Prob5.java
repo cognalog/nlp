@@ -38,11 +38,11 @@ public class Prob5{
 					double denom = 0;
 					for(int j = 0; j < l; j++){
 						if(qp[j][i] == 0)
-							qp[j][i] = 1.0 / (eWords.length + 1);
+							qp[j][i] = 1.0 / (l + 1);
 						denom += qp[j][i] * tParams.get(eWords[j]).getT(fWords[i]);//assumes this t param has been calculated in Prob4
 					}
 
-					//update counts, then q and t
+					//estimate q and t params
 					for(int j = 0; j < eWords.length; j++){
 						String e = eWords[j];
 						String f = fWords[i];
