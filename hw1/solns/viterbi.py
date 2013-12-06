@@ -11,7 +11,7 @@ def getEmission(x, y, store):
 		return 0
 	num = store[x][y]
 	denom = store[y]
-	return math.log(float(num)/float(denom), 2) if num != 0 and denom != 0 else 0
+	return math.log(float(num)/float(denom), math.e) if num != 0 and denom != 0 else 0
 
 """
 uses count data to find a trigram's transition parameter
@@ -22,7 +22,7 @@ def getQ (y1, y2, y3, grams):
 		return 0
 	num = grams[y1].gramCount(y2, y3)
 	denom = grams[y1].gramCount(y2)
-	return math.log(float(num) / float(denom), 2) if num != 0 and denom != 0 else 0
+	return math.log(float(num) / float(denom), math.e) if num != 0 and denom != 0 else 0
 
 def pi (k, u, v):
 	if wordSeq[k-1] in infreq or wordSeq[k-1] not in emStruct:
@@ -33,7 +33,7 @@ def pi (k, u, v):
 	maxW = ''
 	maxP = 0
 	for w in getS(k-2):
-		p =  table[k-1][w][u][1] + getQ(w, u, v, tranStruct) * getEmission(word, v, emStruct)
+		p =  (math.log(table[k-1][w][u][1], math.e) if table[k-1][w][u][1] > 0 else 0) + getQ(w, u, v, tranStruct) * getEmission(word, v, emStruct)
 		if p > maxP:
 			maxP = p
 			maxW = w
