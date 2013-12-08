@@ -37,7 +37,7 @@ def scoreGen(gen, eg, v):
 				if s3Key not in v: v[s3Key] = 0 
 				gSUFF3 = v[s3Key]
 
-		scored += line + "%5s\n" % str(gBIGRAM + gTAG + gSUFF1 + gSUFF2 + gSUFF3)
+		scored += line + " %s\n" % str(gBIGRAM + gTAG + gSUFF1 + gSUFF2 + gSUFF3)
 
 	return scored
 
@@ -95,11 +95,11 @@ if __name__ == "__main__":
 		print "usage: python %s <training_data> <history_generator> <dev_data> <decoder>"
 		exit(1)
 
-	t = time.clock()
+	t = time.time()
 	v = dict()
 	#perceptron training
 	examples = open(argv[1]).read().split("\n\n")
-	iterations = 1
+	iterations = 5
 	for i in range(iterations):
 		goldProc = p.process(["python", argv[2], "GOLD"])
 		enumProc = p.process(["python", argv[2], "ENUM"])
@@ -115,3 +115,5 @@ if __name__ == "__main__":
 	
 	for f in v.keys():
 		print "%s %s" % (f, v[f])
+
+	#print time.time() - t

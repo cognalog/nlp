@@ -11,7 +11,7 @@ def getV(file):
 			v[line[0]] = float(line[1])
 	return v
 
-def scoreHist(hist, sent, v):
+def scoreHist(hist, sent, v, suff):
 	words = sent.split("\n")
 	scored = ""
 	for line in hist.split("\n"):
@@ -23,12 +23,36 @@ def scoreHist(hist, sent, v):
 
 		tKey = "TAG:"+words[int(parts[0])-1]+":"+parts[2]
 		gTAG = v[tKey] if tKey in v else 0
-		scored += line + "%5s\n" % str(gBIGRAM + gTAG)
+
+		gSUFF1 = 0
+		gSUFF2 = 0
+		gSUFF3 = 0
+		if(suff == "y"):
+			word = words[int(parts[0])-1]
+			suf1 = word[len(word)-1:]
+			s1Key = "SUFF:"+suf1+":"+hist[2]
+			if s1Key not in v: v[s1Key] = 0 
+			gSUFF1 = v[s1Key]
+			gSUFF2 = 0
+			gSUFF3 = 0
+			if len(word) >= 2:
+				suf2 = word[len(word)-2:]
+				s2Key = "SUFF:"+suf2+":"+hist[2]
+				if s2Key not in v: v[s2Key] = 0
+				gSUFF2 = v[s2Key]
+
+				if len(word) >= 3:
+					suf3 = word[len(word)-3:]
+					s3Key = "SUFF:"+suf3+":"+hist[2]
+					if s3Key not in v: v[s3Key] = 0 
+					gSUFF3 = v[s3Key]
+
+		scored += line + " %s\n" % str(gBIGRAM + gTAG + gSUFF1 + gSUFF2 + gSUFF3)
 	return scored
 
 if __name__ == "__main__":
-	if(len(argv) != 5):
-		print "usage: python %s <parameters_file> <history_generator> <dev_data> <decoder>" % argv[0]
+	if(len(argv) != 6):
+		print "usage: python %s <parameters_file> <history_generator> <dev_data> <decoder> <include_suffixes? (y/n)>" % argv[0]
 		exit(1)
 
 	v = getV(argv[1])
@@ -38,7 +62,7 @@ if __name__ == "__main__":
 	
 	for s in sentences:
 		hist = p.call(histProc, s)
-		scored = scoreHist(hist, s, v)
+		scored = scoreHist(hist, s, v, argv[5])
 		decProc = p.process(["python", argv[4], "HISTORY"])
 		histMax = p.call(decProc, scored)
 		#decProc dies after this
