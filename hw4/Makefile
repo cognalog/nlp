@@ -1,7 +1,7 @@
 data/prob4.out: src/Prob4.py data/tag.model data/tagger_history_generator.py data/tag_dev.dat data/tagger_decoder.py
 	python src/Prob4.py data/tag.model data/tagger_history_generator.py data/tag_dev.dat data/tagger_decoder.py n > data/prob4.out
 #add data/suffix_tagger.model to dependencies, output to data/prob5.out
-data/prob5.out: src/Prob4.py data/tagger_history_generator.py data/tag_dev.dat data/tagger_decoder.py
+data/prob5.out: src/Prob4.py data/suffix_tagger.model data/tagger_history_generator.py data/tag_dev.dat data/tagger_decoder.py
 	python src/Prob4.py data/suffix_tagger.model data/tagger_history_generator.py data/tag_dev.dat data/tagger_decoder.py y > data/prob5.out
 
 data/suffix_tagger.model: src/Prob5.py data/tag_train.dat data/tagger_history_generator.py data/tag_dev.dat data/tagger_decoder.py

@@ -45,50 +45,34 @@ def updateV(y, z, eg, v):
 	egLines = eg.split("\n")
  	yLines = y.split("\n")
  	zLines = z.split("\n")
- 	yFV = dict()
- 	zFV = dict()
+
  	#assemble feature vectors for y and z
  	for i in range(min(len(yLines)-1, len(zLines)-1)):
  		yLine = re.split("[ \t]+", yLines[i])
  		zLine = re.split("[ \t]+", zLines[i])
 
- 		bY = "BIGRAM:"+yLine[1]+":"+yLine[2]
- 		yFV[bY] = 1 if bY not in yFV else yFV[bY] + 1
- 		bZ = "BIGRAM:"+zLine[1]+":"+zLine[2]
- 		zFV[bZ] = 1 if bZ not in zFV else zFV[bZ] + 1
+ 		v["BIGRAM:"+yLine[1]+":"+yLine[2]] += 1
+ 		v["BIGRAM:"+zLine[1]+":"+zLine[2]] -= 1
 
  		word = re.split("[ \t]+", egLines[int(yLine[0])-1])[0]
-		tY = "TAG:"+word+":"+yLine[2]
-		yFV[tY] = 1 if tY not in yFV else yFV[tY] + 1
-		tZ = "TAG:"+word+":"+zLine[2]
-		zFV[tZ] = 1 if tZ not in zFV else zFV[tZ] + 1
+		v["TAG:"+word+":"+yLine[2]] += 1
+		v["TAG:"+word+":"+zLine[2]] -= 1
 
 		suf1 = word[len(word)-1:]
-		s1Y = "SUFF:"+suf1+":"+yLine[2]
-		yFV[s1Y] = 1 if s1Y not in yFV else yFV[s1Y] + 1
-		s1Z = "SUFF:"+suf1+":"+zLine[2]
-		zFV[s1Z] = 1 if s1Z not in zFV else zFV[s1Z] + 1
+		v["SUFF:"+suf1+":"+yLine[2]] += 1
+		v["SUFF:"+suf1+":"+zLine[2]] -= 1
 
 		if len(word) < 2:
 			continue
 		suf2 = word[len(word)-2:]
-		s2Y = "SUFF:"+suf2+":"+yLine[2]
-		yFV[s2Y] = 1 if s2Y not in yFV else yFV[s2Y] + 1
-		s2Z = "SUFF:"+suf2+":"+zLine[2]
-		zFV[s2Z] = 1 if s2Z not in zFV else zFV[s2Z] + 1
+		v["SUFF:"+suf2+":"+yLine[2]] += 1
+		v["SUFF:"+suf2+":"+zLine[2]] -= 1
 
 		if len(word) < 3:
 			continue
 		suf3 = word[len(word)-3:]
-		s3Y = "SUFF:"+suf3+":"+yLine[2]
-		yFV[s3Y] = 1 if s3Y not in yFV else yFV[s3Y] + 1
-		s3Z = "SUFF:"+suf3+":"+zLine[2]
-		zFV[s3Z] = 1 if s3Z not in zFV else zFV[s3Z] + 1
-	#add the feature vector difference to v
-	for f in yFV.keys():
-		v[f] += yFV[f]
-	for f in zFV.keys():
-		v[f] -= zFV[f]
+		v["SUFF:"+suf3+":"+yLine[2]] += 1
+		v["SUFF:"+suf3+":"+zLine[2]] -= 1
 
 if __name__ == "__main__":
 	if len(argv) != 5:
@@ -116,4 +100,4 @@ if __name__ == "__main__":
 	for f in v.keys():
 		print "%s %s" % (f, v[f])
 
-	#print time.time() - t
+	print time.time() - t

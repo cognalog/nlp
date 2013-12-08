@@ -24,6 +24,7 @@ def scoreHist(hist, sent, v, suff):
 		tKey = "TAG:"+words[int(parts[0])-1]+":"+parts[2]
 		gTAG = v[tKey] if tKey in v else 0
 
+		#include suffix features
 		gSUFF1 = 0
 		gSUFF2 = 0
 		gSUFF3 = 0
