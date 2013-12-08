@@ -1,4 +1,3 @@
-import subprocess as s
 import pipe_servers as p
 import re
 from sys import argv
@@ -28,7 +27,6 @@ def scoreHist(hist, sent, v):
 		scored += line + "%5s\n" % str(gBIGRAM + gTAG)
 	return scored
 
-
 if __name__ == "__main__":
 	if(len(argv) != 5):
 		print "usage: python %s <parameters_file> <history_generator> <dev_data> <decoder>" % argv[0]
@@ -45,7 +43,7 @@ if __name__ == "__main__":
 		decProc = p.process(["python", argv[4], "HISTORY"])
 		histMax = p.call(decProc, scored)
 		#decProc dies after this
-		
+
 		#time to format the arg max for evaluation...thanks for the busy work!
 		words = s.split("\n")
 		hLines = histMax.split("\n")
@@ -53,3 +51,4 @@ if __name__ == "__main__":
 			parts = re.split(" +", line)
 			if len(parts) == 3 and parts[2] != "STOP":
 				print "%s %5s" % (words[int(parts[0])-1], parts[2])
+		print #I wasted 10 minutes wondering why I was getting .187...then I added this.
