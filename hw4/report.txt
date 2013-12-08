@@ -1,0 +1,61 @@
+****************
+Running the Code
+****************
+-I set up a Makefile to facilitate running the code.  Of course you don't have to use it if you don't want to, but I'll be describing how to use it.
+-I also slightly modified pipe_server.py from the class files and included it in my src folder to simplify process handling
+-using the Makefile to solve the 3 questions:
+	-Question 4:
+		-relevant code is in Prob4.py
+		-data/prob4.out will contain the sentences matched with tag sequences
+			-generate by running "make data/prob4.out" in terminal
+		-to print evaluation to console, run "make eval4"
+	-Question 5:
+		-relevant code is in Prob5.py
+		-learned tagging model is in data/suffix_tagger.model
+			-generate by running "make data/suffix_tagger.model" in terminal
+		-sentence/tag output is in data/prob5.out
+			-generate by running "make data/prob5.out" in terminal
+		-to print evaluation to console, run "make eval5"
+	-Question 6:
+		-relevant code is in Prob6.py
+		-output is in data/prob6.out
+			-generate by running "make data/prob6.out" in terminal
+		-to print evaluation to console, run "make eval6"
+	-misc
+		-to get rid of any artifacts, use "make clean"
+		-to print Prob4-6 in console, use "make run#" where # is 4, 5 or 6
+		-to enumerate output discrepancies, use "python compare_outputs.py <output_file> <output_file>"
+
+**********************
+Performance/Efficiency
+**********************
+-Question 4 (IBM Model 1)
+	-5.2 seconds
+	-2226/2459, 0.905246034974
+	
+-Question 5 (IBM Model 2)
+	-80 seconds for 5 iterations
+	-2157/2459, 0.877185847906
+
+-Question 6
+	-81 seconds for 5 iterations
+	-features
+		1. tag bigram
+		2. word/tag pair
+		3. word-length/tag
+		4. capitalized-word/tag
+		5. letterless-word/tag
+	-performance
+		-1, 2, 5: 0.905246034974
+		-1, 2, 4, 5: 0.881659211061
+		-3, 4, 5: 0.655144367629
+		-1, 4, 5: 0.813338755592
+
+************
+Observations
+************
+-Prob5
+	-it seems the new features actually dragged down the tagger's performance
+-Prob6
+	-the the word length feature was certainly the weakest link
+	-numbers seemed to be the most mistagged items, inspiring the leterless feature (and it worked decently)
