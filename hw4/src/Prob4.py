@@ -15,7 +15,6 @@ def scoreHist(hist, sent, v):
 	words = sent.split("\n")
 	scored = ""
 	for line in hist.split("\n"):
-		#print line
 		parts = re.split(" +", line)
 		if len(parts) < 3:
 			continue
