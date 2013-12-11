@@ -18,7 +18,7 @@ data/custom_tagger.model: src/Prob6.py data/tag_train.dat data/tagger_history_ge
 
 .PHONY: clean
 clean:
-	rm src/*.pyc data/*.pyc data/*.out data/*.model
+	rm src/*.pyc data/*.pyc data/*.out
 
 .PHONY: eval4
 eval4: data/eval_tagger.py data/tag_dev.key data/prob4.out
